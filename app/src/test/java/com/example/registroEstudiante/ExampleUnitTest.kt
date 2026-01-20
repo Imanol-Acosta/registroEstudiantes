@@ -1,4 +1,4 @@
-package com.example.registrodeestudiante
+package com.example.registroEstudiante
 
 import org.junit.Test
 
