@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "estudiantes")
 
-data class EstudianteEntity(
+data class EntityEstudiante(
     @PrimaryKey(autoGenerate = true)
     val estudianteId: Int = 0,
     val nombres: String,

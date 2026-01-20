@@ -3,7 +3,7 @@ package com.example.registroEstudiante.Data.DataBase
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.example.registroEstudiante.Data.Tareas.local.EstudianteDao
-
+import com.example.registroEstudiante.Data.Tareas.local.EntityEstudiante
 
 
 
