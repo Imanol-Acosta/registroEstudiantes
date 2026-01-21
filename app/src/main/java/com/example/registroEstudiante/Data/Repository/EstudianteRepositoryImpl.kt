@@ -1,15 +1,15 @@
 package com.example.registroEstudiante.Data.Repository
-import
-import com.example.registroEstudiante.Data.Tareas.local.EstudianteDao
+
 import com.example.registroEstudiante.Data.Tareas.local.EntityEstudiante
 import com.example.registroEstudiante.Domain.Model.Estudiante
 import com.example.registroEstudiante.Domain.Repository.EstudianteRepository
+import com.example.registroEstudiante.Data.Tareas.local.EstudianteDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 
-class EstudianteRepositorylmpl @Inject constructor(
+class EstudianteRepositoryImpl @Inject constructor(
     private val estudianteDao: EstudianteDao
 ) : EstudianteRepository {
 
@@ -24,17 +24,17 @@ class EstudianteRepositorylmpl @Inject constructor(
     }
 
     override suspend fun upsert(estudiante: Estudiante): Int {
-        val entity = Estudiante.toEntity()
-        val result = EstudianteDao.upsert(entity)
+        val entity = estudiante.toEntity()
+        val result = estudianteDao.upsert(entity)
         return if (estudiante.estudianteId == 0) result.toInt() else estudiante.estudianteId
     }
 
     override suspend fun delete(id: Int) {
-        EstudianteDao.deleteById(id)
+        estudianteDao.deleteById(id)
     }
 
     override suspend fun getEstudiantesByNombre(nombre: String): List<Estudiante> {
-        return EstudianteDao.getEstudiantesByNombre(nombre).map { it.toEstudiante() }
+        return estudianteDao.getEstudiantesByNombre(nombre).map { it.toEstudiante() } as List<Estudiante>
     }
 }
 
