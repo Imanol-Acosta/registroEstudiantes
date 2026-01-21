@@ -8,13 +8,13 @@ plugins {
 }
 
 android {
-    namespace = "edu.ucne.registroestudiantes"
+    namespace = "edu.ucne.registrodeestudiantes"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "edu.ucne.registroestudiantes"
+        applicationId = "edu.ucne.RegistroDeEstudiantes"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
