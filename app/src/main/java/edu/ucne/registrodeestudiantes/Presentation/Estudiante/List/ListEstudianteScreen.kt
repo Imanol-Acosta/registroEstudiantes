@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -14,18 +15,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import edu.ucne.registrodeestudiantes.Model.Estudiante
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
 
 
 @Composable
 fun EstudianteListScreen(
     onNavigateToEdit: (Int) -> Unit,
     onNavigateToCreate: () -> Unit,
+    onDrawerClick: () -> Unit,
     viewModel: ListEstudianteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EstudianteListBody(
         state = state,
+        onDrawerClick = onDrawerClick,
         onEvent = { event ->
             when (event) {
                 is ListEstudianteUiEvent.Edit -> onNavigateToEdit(event.id)
@@ -36,12 +39,24 @@ fun EstudianteListScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun EstudianteListBody(
     state: ListEstudianteUiState,
+    onDrawerClick: () -> Unit,
     onEvent: (ListEstudianteUiEvent) -> Unit
 ) {
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Lista de Estudiantes") },
+                navigationIcon = {
+                    IconButton(onClick = onDrawerClick) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(ListEstudianteUiEvent.CreateNew) }) {
                 Text("+")
@@ -113,6 +128,6 @@ private fun EstudianteListBodyPreview() {
                 Estudiante(estudianteId = 2, nombres = "Juana Castro", email = "juana@email.com", edad = 22)
             )
         )
-        EstudianteListBody(state) {}
+        EstudianteListBody(state, onDrawerClick = {}) {}
     }
 }

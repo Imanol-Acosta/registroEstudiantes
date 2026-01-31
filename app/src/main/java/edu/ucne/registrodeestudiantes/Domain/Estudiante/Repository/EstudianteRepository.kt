@@ -1,5 +1,5 @@
-package edu.ucne.registrodeestudiantes.Repository
-import edu.ucne.registrodeestudiantes.Model.Estudiante
+package edu.ucne.registrodeestudiantes.Domain.Estudiante.Repository
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
 import kotlinx.coroutines.flow.Flow
 
 interface EstudianteRepository {

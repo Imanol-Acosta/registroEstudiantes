@@ -3,11 +3,11 @@ package edu.ucne.registrodeestudiantes.Presentation.Estudiante.Edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import edu.ucne.registrodeestudiantes.Model.Estudiante
-import edu.ucne.registrodeestudiantes.Usecase.DeleteEstudianteUseCase
-import edu.ucne.registrodeestudiantes.Usecase.GetEstudianteUseCase
-import edu.ucne.registrodeestudiantes.Usecase.UpsertEstudianteUseCase
-import edu.ucne.registrodeestudiantes.Usecase.ValidateEstudianteUseCase
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Usecase.DeleteEstudianteUseCase
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Usecase.GetEstudianteUseCase
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Usecase.UpsertEstudianteUseCase
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Usecase.ValidateEstudianteUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
