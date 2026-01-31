@@ -1,8 +1,9 @@
 package edu.ucne.registrodeestudiantes.Data.Repository
 
-import edu.ucne.registrodeestudiantes.Data.Tareas.local.EntityEstudiante
-import edu.ucne.registrodeestudiantes.Model.Estudiante
-import edu.ucne.registrodeestudiantes.Repository.EstudianteRepository
+import edu.ucne.registrodeestudiantes.Data.Mapper.toDomain
+import edu.ucne.registrodeestudiantes.Data.Mapper.toEntity
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Repository.EstudianteRepository
 import edu.ucne.registrodeestudiantes.Data.Tareas.local.EstudianteDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,12 +16,12 @@ class EstudianteRepositoryImpl @Inject constructor(
 
     override fun observeEstudiante(): Flow<List<Estudiante>> {
         return estudianteDao.observerAll().map { entities ->
-            entities.map { it.toEstudiante() }
+            entities.map { it.toDomain() }
         }
     }
 
     override suspend fun getEstudiante(id: Int): Estudiante? {
-        return estudianteDao.getById(id)?.toEstudiante()
+        return estudianteDao.getById(id)?.toDomain()
     }
 
     override suspend fun upsert(estudiante: Estudiante): Int {
@@ -34,24 +35,6 @@ class EstudianteRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEstudiantesByNombre(nombre: String): List<Estudiante> {
-        return estudianteDao.getEstudiantesByNombre(nombre).map { it.toEstudiante() } as List<Estudiante>
+        return estudianteDao.getEstudiantesByNombre(nombre).map { it.toDomain() }
     }
-}
-
-fun EntityEstudiante.toEstudiante(): Estudiante {
-    return Estudiante(
-        estudianteId = estudianteId,
-        nombres = nombres,
-        email = email,
-        edad = edad
-    )
-}
-
-fun Estudiante.toEntity(): EntityEstudiante {
-    return EntityEstudiante(
-        estudianteId = estudianteId,
-        nombres = nombres,
-        email = email,
-        edad = edad
-    )
 }
