@@ -1,6 +1,6 @@
-package edu.ucne.registrodeestudiantes.Usecase
-import edu.ucne.registrodeestudiantes.Model.Estudiante
-import edu.ucne.registrodeestudiantes.Repository.EstudianteRepository
+package edu.ucne.registrodeestudiantes.Domain.Estudiante.Usecase
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
+import edu.ucne.registrodeestudiantes.Domain.Estudiante.Repository.EstudianteRepository
 import javax.inject.Inject
 
 class UpsertEstudianteUseCase @Inject constructor(
