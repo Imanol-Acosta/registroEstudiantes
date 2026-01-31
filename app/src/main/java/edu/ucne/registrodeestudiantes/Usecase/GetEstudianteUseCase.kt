@@ -1,0 +1,13 @@
+package edu.ucne.registrodeestudiantes.Usecase
+import edu.ucne.registrodeestudiantes.Model.Estudiante
+import edu.ucne.registrodeestudiantes.Repository.EstudianteRepository
+import javax.inject.Inject
+
+class GetEstudianteUseCase @Inject constructor(
+    private val repository: EstudianteRepository
+) {
+    suspend operator fun invoke(id: Int): Estudiante? {
+        if (id <= 0) throw IllegalArgumentException("El id debe ser mayor a 0")
+        return repository.getEstudiante(id)
+    }
+}
