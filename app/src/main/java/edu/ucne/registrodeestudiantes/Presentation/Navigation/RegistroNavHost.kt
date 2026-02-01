@@ -12,8 +12,8 @@ import edu.ucne.registrodeestudiantes.Presentation.Asignatura.AsignaturaScreen
 import edu.ucne.registrodeestudiantes.Presentation.Asignatura.List.AsignaturaListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.List.EstudianteListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.Edit.EditEstudianteScreen
-import edu.ucne.registrodeestudiantes.Presentation.Penalidad.TipoPenalidadScreen
-import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.TipoPenalidadListScreen
+import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.TipoPenalidadScreen
+import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.ListTipoPenalidadScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -65,7 +65,7 @@ fun RegistroNavHost(
             }
 
             composable<Screen.PenalidadList> {
-                TipoPenalidadListScreen(
+                ListTipoPenalidadScreen(
                     onDrawer = { scope.launch { drawerState.open() } },
                     goToPenalidad = { id -> navHostController.navigate(Screen.Penalidad(id)) },
                     createPenalidad = { navHostController.navigate(Screen.Penalidad(0)) }

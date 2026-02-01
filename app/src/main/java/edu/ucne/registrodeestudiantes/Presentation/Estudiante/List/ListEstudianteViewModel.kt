@@ -22,21 +22,24 @@ class ListEstudianteViewModel @Inject constructor(
     val state: StateFlow<ListEstudianteUiState> = _state.asStateFlow()
 
     init {
-        onEvent(ListEstudianteUiEvent.Load)
+        loadEstudiantes()
     }
 
     fun onEvent(event: ListEstudianteUiEvent) {
         when (event) {
-            ListEstudianteUiEvent.Load -> observeEstudiantes()
+            ListEstudianteUiEvent.Load -> loadEstudiantes()
+            ListEstudianteUiEvent.Refresh -> loadEstudiantes()
             is ListEstudianteUiEvent.Delete -> onDelete(event.id)
             ListEstudianteUiEvent.CreateNew -> _state.update { it.copy(navigateToCreate = true) }
             is ListEstudianteUiEvent.Edit -> _state.update { it.copy(navigateToEditId = event.id) }
             is ListEstudianteUiEvent.ShowMessage -> _state.update { it.copy(message = event.message) }
+            ListEstudianteUiEvent.ClearMessage -> _state.update { it.copy(message = null) }
         }
     }
 
-    private fun observeEstudiantes() {
+    private fun loadEstudiantes() {
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             observeEstudianteUseCase().collectLatest { estudiantesList ->
                 _state.update {
                     it.copy(
@@ -51,12 +54,8 @@ class ListEstudianteViewModel @Inject constructor(
 
     private fun onDelete(id: Int) {
         viewModelScope.launch {
-            try {
-                deleteEstudianteUseCase(id)
-                onEvent(ListEstudianteUiEvent.ShowMessage("Estudiante eliminado"))
-            } catch (e: Exception) {
-                onEvent(ListEstudianteUiEvent.ShowMessage("Error al eliminar: ${e.message}"))
-            }
+            deleteEstudianteUseCase(id)
+             onEvent(ListEstudianteUiEvent.ShowMessage("Estudiante eliminado"))
         }
     }
 

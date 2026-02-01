@@ -16,14 +16,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditEstudianteScreen(
-    estudianteId: Int?,
+    estudianteId: Int, // The ViewModel gets it from SavedStateHandle, but for compatibility/completeness we can keep it in signature or remove it from NavHost calls. Let's keep signature consistent with NavHost call.
     onNavigateBack: () -> Unit,
     viewModel: EditEstudianteViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(estudianteId) {
-        viewModel.onEvent(EditEstudianteUiEvent.Load(estudianteId))
-    }
-
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.saved, state.deleted) {

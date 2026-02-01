@@ -9,6 +9,8 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,19 +22,19 @@ import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
 
 @Composable
 fun EstudianteListScreen(
-    onNavigateToEdit: (Int) -> Unit,
-    onNavigateToCreate: () -> Unit,
-    onDrawerClick: () -> Unit,
+    onDrawer: () -> Unit,
+    goToEstudiante: (Int) -> Unit,
+    createEstudiante: () -> Unit,
     viewModel: ListEstudianteViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     EstudianteListBody(
         state = state,
-        onDrawerClick = onDrawerClick,
+        onDrawer = onDrawer,
         onEvent = { event ->
             when (event) {
-                is ListEstudianteUiEvent.Edit -> onNavigateToEdit(event.id)
-                is ListEstudianteUiEvent.CreateNew -> onNavigateToCreate()
+                is ListEstudianteUiEvent.Edit -> goToEstudiante(event.id)
+                is ListEstudianteUiEvent.CreateNew -> createEstudiante()
                 else -> viewModel.onEvent(event)
             }
         }
@@ -43,16 +45,26 @@ fun EstudianteListScreen(
 @Composable
 private fun EstudianteListBody(
     state: ListEstudianteUiState,
-    onDrawerClick: () -> Unit,
+    onDrawer: () -> Unit,
     onEvent: (ListEstudianteUiEvent) -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(state.message) {
+        state.message?.let { message ->
+            snackbarHostState.showSnackbar(message)
+            onEvent(ListEstudianteUiEvent.ClearMessage)
+        }
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(
-                title = { Text("Lista de Estudiantes") },
+            CenterAlignedTopAppBar(
+                title = { Text("Listado de Estudiantes") },
                 navigationIcon = {
-                    IconButton(onClick = onDrawerClick) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                    IconButton(onClick = onDrawer) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
             )
@@ -117,17 +129,20 @@ private fun EstudianteCard(
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 private fun EstudianteListBodyPreview() {
+    val estudiantes = listOf(
+        Estudiante(1, "Juan Perez", "juan@email.com", 20),
+        Estudiante(2, "Maria Garcia", "maria@email.com", 21)
+    )
+    val state = ListEstudianteUiState(estudiantes = estudiantes)
+    
     MaterialTheme {
-        val state = ListEstudianteUiState(
-            estudiantes = listOf(
-                Estudiante(estudianteId = 1, nombres = "Jose Duarte", email = "jose@email.com", edad = 20),
-                Estudiante(estudianteId = 2, nombres = "Juana Castro", email = "juana@email.com", edad = 22)
-            )
+        EstudianteListBody(
+            state = state,
+            onDrawer = {},
+            onEvent = {}
         )
-        EstudianteListBody(state, onDrawerClick = {}) {}
     }
 }
