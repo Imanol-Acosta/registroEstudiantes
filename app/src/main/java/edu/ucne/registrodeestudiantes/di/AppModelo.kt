@@ -9,13 +9,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import edu.ucne.registrodeestudiantes.Data.Repository.EstudianteRepositoryImpl
 import edu.ucne.registrodeestudiantes.Data.Repository.AsignaturaRepositoryImpl
+import edu.ucne.registrodeestudiantes.Data.Repository.TipoPenalidadRepositoryImpl
 import edu.ucne.registrodeestudiantes.Data.Tareas.local.EstudianteDao
 import edu.ucne.registrodeestudiantes.Data.Tareas.local.AsignaturaDao
+import edu.ucne.registrodeestudiantes.Data.Tareas.local.TipoPenalidadDao
 import edu.ucne.registrodeestudiantes.Domain.Estudiante.Repository.EstudianteRepository
 import edu.ucne.registrodeestudiantes.Domain.Asignatura.Repository.AsignaturaRepository
+import edu.ucne.registrodeestudiantes.Domain.Penalidad.Repository.TipoPenalidadRepository
 import edu.ucne.registrodeestudiantes.Data.DataBase.DBEstudiante
 import javax.inject.Singleton
-
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -34,13 +36,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideEstudianteDao(estudianteDB: DBEstudiante) : EstudianteDao{
-        return estudianteDB.estudianteDao()
+        return estudianteDB.EstudianteDao()
     }
 
     @Provides
     @Singleton
     fun provideAsignaturaDao(estudianteDB: DBEstudiante) : AsignaturaDao{
         return estudianteDB.asignaturaDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTipoPenalidadDao(estudianteDB: DBEstudiante) : TipoPenalidadDao{
+        return estudianteDB.tipoPenalidadDao()
     }
 
     @Provides
@@ -52,6 +60,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAsignaturaRepository(impl: AsignaturaRepositoryImpl): AsignaturaRepository {
+        return impl
+    }
+
+    @Provides
+    @Singleton
+    fun provideTipoPenalidadRepository(impl: TipoPenalidadRepositoryImpl): TipoPenalidadRepository {
         return impl
     }
 }

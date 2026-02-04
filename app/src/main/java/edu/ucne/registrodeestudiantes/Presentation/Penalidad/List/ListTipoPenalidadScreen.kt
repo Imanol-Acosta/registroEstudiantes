@@ -1,4 +1,4 @@
-package edu.ucne.registrodeestudiantes.Presentation.Estudiante.List
+package edu.ucne.registrodeestudiantes.Presentation.Penalidad.List
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,24 +17,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import edu.ucne.registrodeestudiantes.Domain.Estudiante.Model.Estudiante
-
+import edu.ucne.registrodeestudiantes.Domain.Penalidad.Model.TipoPenalidad
 
 @Composable
-fun EstudianteListScreen(
+fun ListTipoPenalidadScreen(
     onDrawer: () -> Unit,
-    goToEstudiante: (Int) -> Unit,
-    createEstudiante: () -> Unit,
-    viewModel: ListEstudianteViewModel = hiltViewModel()
+    goToPenalidad: (Int) -> Unit,
+    createPenalidad: () -> Unit,
+    viewModel: ListTipoPenalidadViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    EstudianteListBody(
+    ListTipoPenalidadBody(
         state = state,
         onDrawer = onDrawer,
         onEvent = { event ->
             when (event) {
-                is ListEstudianteUiEvent.Edit -> goToEstudiante(event.id)
-                is ListEstudianteUiEvent.CreateNew -> createEstudiante()
+                is ListTipoPenalidadUiEvent.Edit -> goToPenalidad(event.id)
+                is ListTipoPenalidadUiEvent.CreateNew -> createPenalidad()
                 else -> viewModel.onEvent(event)
             }
         }
@@ -43,17 +42,17 @@ fun EstudianteListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EstudianteListBody(
-    state: ListEstudianteUiState,
+private fun ListTipoPenalidadBody(
+    state: ListTipoPenalidadUiState,
     onDrawer: () -> Unit,
-    onEvent: (ListEstudianteUiEvent) -> Unit
+    onEvent: (ListTipoPenalidadUiEvent) -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.message) {
         state.message?.let { message ->
             snackbarHostState.showSnackbar(message)
-            onEvent(ListEstudianteUiEvent.ClearMessage)
+            onEvent(ListTipoPenalidadUiEvent.ClearMessage)
         }
     }
 
@@ -61,7 +60,7 @@ private fun EstudianteListBody(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Listado de Estudiantes") },
+                title = { Text("Listado de Penalidades") },
                 navigationIcon = {
                     IconButton(onClick = onDrawer) {
                         Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
@@ -70,7 +69,7 @@ private fun EstudianteListBody(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(ListEstudianteUiEvent.CreateNew) }) {
+            FloatingActionButton(onClick = { onEvent(ListTipoPenalidadUiEvent.CreateNew) }) {
                 Text("+")
             }
         }
@@ -88,11 +87,11 @@ private fun EstudianteListBody(
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                items(state.estudiantes) { estudiante ->
-                    EstudianteCard(
-                        estudiante = estudiante,
-                        onClick = { onEvent(ListEstudianteUiEvent.Edit(estudiante.estudianteId)) },
-                        onDelete = { onEvent(ListEstudianteUiEvent.Delete(estudiante.estudianteId)) }
+                items(state.penalidades) { penalidad ->
+                    TipoPenalidadCard(
+                        penalidad = penalidad,
+                        onClick = { onEvent(ListTipoPenalidadUiEvent.Edit(penalidad.tipoId)) },
+                        onDelete = { onEvent(ListTipoPenalidadUiEvent.Delete(penalidad.tipoId)) }
                     )
                 }
             }
@@ -101,8 +100,8 @@ private fun EstudianteListBody(
 }
 
 @Composable
-private fun EstudianteCard(
-    estudiante: Estudiante,
+private fun TipoPenalidadCard(
+    penalidad: TipoPenalidad,
     onClick: () -> Unit,
     onDelete: (Int) -> Unit,
 ) {
@@ -119,27 +118,28 @@ private fun EstudianteCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(estudiante.nombres, style = MaterialTheme.typography.titleMedium)
-                Text(estudiante.email, style = MaterialTheme.typography.bodySmall)
-                Text("Edad: ${estudiante.edad}", style = MaterialTheme.typography.bodyMedium)
+                Text(penalidad.nombre, style = MaterialTheme.typography.titleMedium)
+                Text(penalidad.descripcion, style = MaterialTheme.typography.bodySmall)
+                Text("Puntos: ${penalidad.puntosDescuento}", style = MaterialTheme.typography.bodyMedium)
             }
-            IconButton(onClick = { onDelete(estudiante.estudianteId) }) {
+            IconButton(onClick = { onDelete(penalidad.tipoId) }) {
                 Icon(Icons.Default.Delete, contentDescription = "Eliminar")
             }
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
-private fun EstudianteListBodyPreview() {
-    val estudiantes = listOf(
-        Estudiante(1, "Juan Perez", "juan@email.com", 20),
-        Estudiante(2, "Maria Garcia", "maria@email.com", 21)
+private fun ListTipoPenalidadBodyPreview() {
+    val penalidades = listOf(
+        TipoPenalidad(1, "Tardanza", "Llegar tarde", 5),
+        TipoPenalidad(2, "Uniforme", "Sin uniforme", 10)
     )
-    val state = ListEstudianteUiState(estudiantes = estudiantes)
+    val state = ListTipoPenalidadUiState(penalidades = penalidades)
     
     MaterialTheme {
-        EstudianteListBody(
+        ListTipoPenalidadBody(
             state = state,
             onDrawer = {},
             onEvent = {}

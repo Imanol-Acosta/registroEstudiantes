@@ -14,6 +14,9 @@ interface AsignaturaDao {
     @Delete
     suspend fun delete(asignatura: AsignaturaEntity): Int
 
+    @Query("DELETE FROM asignaturas WHERE asignaturaId = :id")
+    suspend fun delete(id: Int)
+
     @Query("SELECT * FROM asignaturas WHERE asignaturaId = :id")
     suspend fun find(id: Int): AsignaturaEntity?
 
