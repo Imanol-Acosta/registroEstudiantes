@@ -1,3 +1,5 @@
+package edu.ucne.registrodeestudiantes.Presentation.Estudiante.List
+
 sealed interface ListEstudianteUiEvent {
     data object Load : ListEstudianteUiEvent
     data object Refresh : ListEstudianteUiEvent

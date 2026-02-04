@@ -80,6 +80,8 @@ class EditEstudianteViewModel @Inject constructor(
     }
 
     private fun onSave() {
+        if (state.value.isSaving) return
+
         val nombresValidation = validateNombres(state.value.nombres)
         val emailValidation = validateEmail(state.value.email)
         val edadValidation = validateEdad(state.value.edad)
