@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "TiposPenalidades")
 data class TipoPenalidadEntity(
     @PrimaryKey(autoGenerate = true)
-    val tipoId: Int? = null,
+    val tipoId: Int = 0,
     val nombre: String,
     val descripcion: String,
     val puntosDescuento: Int

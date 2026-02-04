@@ -14,6 +14,9 @@ interface TipoPenalidadDao {
     @Delete
     suspend fun delete(tipoPenalidad: TipoPenalidadEntity)
 
+    @Query("DELETE FROM TiposPenalidades WHERE tipoId = :id")
+    suspend fun delete(id: Int)
+
     @Query("SELECT * FROM TiposPenalidades WHERE tipoId = :id")
     suspend fun find(id: Int): TipoPenalidadEntity?
 

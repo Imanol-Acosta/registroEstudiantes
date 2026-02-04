@@ -9,4 +9,5 @@ interface TipoPenalidadRepository {
     suspend fun findByNombre(nombre: String): TipoPenalidad?
     suspend fun upsert(tipoPenalidad: TipoPenalidad)
     suspend fun delete(tipoPenalidad: TipoPenalidad)
+    suspend fun delete(id: Int)
 }
