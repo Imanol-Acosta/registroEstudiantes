@@ -9,4 +9,5 @@ interface AsignaturaRepository {
     suspend fun findByNombre(nombre: String): Asignatura?
     suspend fun upsert(asignatura: Asignatura)
     suspend fun delete(asignatura: Asignatura)
+    suspend fun delete(id: Int)
 }

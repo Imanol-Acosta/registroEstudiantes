@@ -26,4 +26,6 @@ class TipoPenalidadRepositoryImpl @Inject constructor(
 
     override suspend fun delete(tipoPenalidad: TipoPenalidad) =
         tipoPenalidadDao.delete(tipoPenalidad.toEntity())
+
+    override suspend fun delete(id: Int) = tipoPenalidadDao.delete(id)
 }

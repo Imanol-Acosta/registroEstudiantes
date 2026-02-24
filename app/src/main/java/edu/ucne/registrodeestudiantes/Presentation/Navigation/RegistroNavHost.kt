@@ -8,12 +8,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import edu.ucne.registrodeestudiantes.Presentation.Asignatura.AsignaturaScreen
 import edu.ucne.registrodeestudiantes.Presentation.Asignatura.List.AsignaturaListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.List.EstudianteListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.Edit.EditEstudianteScreen
-import edu.ucne.registrodeestudiantes.Presentation.Penalidad.TipoPenalidadScreen
-import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.TipoPenalidadListScreen
+import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.ListTipoPenalidadScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -33,9 +31,9 @@ fun RegistroNavHost(
         ) {
             composable<Screen.EstudianteList> {
                 EstudianteListScreen(
-                    onDrawerClick = { scope.launch { drawerState.open() } },
-                    onNavigateToEdit = { id -> navHostController.navigate(Screen.Estudiante(id)) },
-                    onNavigateToCreate = { navHostController.navigate(Screen.Estudiante(0)) }
+                    onDrawer = { scope.launch { drawerState.open() } },
+                    goToEstudiante = { id -> navHostController.navigate(Screen.Estudiante(id)) },
+                    createEstudiante = { navHostController.navigate(Screen.Estudiante(0)) }
                 )
             }
 
@@ -57,15 +55,14 @@ fun RegistroNavHost(
 
             composable<Screen.Asignatura> {
                 val args = it.toRoute<Screen.Asignatura>()
-                AsignaturaScreen(
+                edu.ucne.registrodeestudiantes.Presentation.Asignatura.Edit.EditAsignaturaScreen(
                     asignaturaId = args.asignaturaId,
-                    goBack = { navHostController.navigateUp() },
-                    onDrawer = { scope.launch { drawerState.open() } }
+                    onNavigateBack = { navHostController.navigateUp() }
                 )
             }
 
             composable<Screen.PenalidadList> {
-                TipoPenalidadListScreen(
+                ListTipoPenalidadScreen(
                     onDrawer = { scope.launch { drawerState.open() } },
                     goToPenalidad = { id -> navHostController.navigate(Screen.Penalidad(id)) },
                     createPenalidad = { navHostController.navigate(Screen.Penalidad(0)) }
@@ -74,10 +71,9 @@ fun RegistroNavHost(
 
             composable<Screen.Penalidad> {
                 val args = it.toRoute<Screen.Penalidad>()
-                TipoPenalidadScreen(
+                edu.ucne.registrodeestudiantes.Presentation.Penalidad.Edit.EditTipoPenalidadScreen(
                     penalidadId = args.penalidadId,
-                    goBack = { navHostController.navigateUp() },
-                    onDrawer = { scope.launch { drawerState.open() } }
+                    onNavigateBack = { navHostController.navigateUp() }
                 )
             }
         }

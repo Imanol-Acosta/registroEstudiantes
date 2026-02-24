@@ -1,4 +1,4 @@
-package edu.ucne.registrodeestudiantes.Presentation.Estudiante.Edit
+package edu.ucne.registrodeestudiantes.Presentation.Penalidad.Edit
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -15,10 +15,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditEstudianteScreen(
-    estudianteId: Int, // The ViewModel gets it from SavedStateHandle, but for compatibility/completeness we can keep it in signature or remove it from NavHost calls. Let's keep signature consistent with NavHost call.
+fun EditTipoPenalidadScreen(
+    penalidadId: Int,
     onNavigateBack: () -> Unit,
-    viewModel: EditEstudianteViewModel = hiltViewModel()
+    viewModel: EditTipoPenalidadViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -31,7 +31,7 @@ fun EditEstudianteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(if (state.isNew) "Nuevo Estudiante" else "Editar Estudiante") },
+                title = { Text(if (state.isNew) "Nueva Penalidad" else "Editar Penalidad") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Atrás")
@@ -40,7 +40,7 @@ fun EditEstudianteScreen(
             )
         }
     ) { padding ->
-        EditEstudianteBody(
+        EditTipoPenalidadBody(
             state = state,
             onEvent = viewModel::onEvent,
             modifier = Modifier.padding(padding)
@@ -49,9 +49,9 @@ fun EditEstudianteScreen(
 }
 
 @Composable
-private fun EditEstudianteBody(
-    state: EditEstudianteUiState,
-    onEvent: (EditEstudianteUiEvent) -> Unit,
+private fun EditTipoPenalidadBody(
+    state: EditTipoPenalidadUiState,
+    onEvent: (EditTipoPenalidadUiEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -60,15 +60,15 @@ private fun EditEstudianteBody(
             .fillMaxSize()
     ) {
         OutlinedTextField(
-            value = state.nombres,
-            onValueChange = { onEvent(EditEstudianteUiEvent.NombresChanged(it)) },
-            label = { Text("Nombres") },
-            isError = state.nombresError != null,
+            value = state.nombre,
+            onValueChange = { onEvent(EditTipoPenalidadUiEvent.NombreChanged(it)) },
+            label = { Text("Nombre") },
+            isError = state.nombreError != null,
             modifier = Modifier.fillMaxWidth()
         )
-        if (state.nombresError != null) {
+        if (state.nombreError != null) {
             Text(
-                text = state.nombresError,
+                text = state.nombreError,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -77,16 +77,15 @@ private fun EditEstudianteBody(
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            value = state.email,
-            onValueChange = { onEvent(EditEstudianteUiEvent.EmailChanged(it)) },
-            label = { Text("Email") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            isError = state.emailError != null,
+            value = state.descripcion,
+            onValueChange = { onEvent(EditTipoPenalidadUiEvent.DescripcionChanged(it)) },
+            label = { Text("Descripción") },
+            isError = state.descripcionError != null,
             modifier = Modifier.fillMaxWidth()
         )
-        if (state.emailError != null) {
+        if (state.descripcionError != null) {
             Text(
-                text = state.emailError,
+                text = state.descripcionError,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -95,16 +94,25 @@ private fun EditEstudianteBody(
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            value = state.edad?.toString() ?: "",
-            onValueChange = { onEvent(EditEstudianteUiEvent.EdadChanged(it)) },
-            label = { Text("Edad") },
+            value = state.puntosDescuento?.toString() ?: "",
+            onValueChange = { onEvent(EditTipoPenalidadUiEvent.PuntosChanged(it)) },
+            label = { Text("Puntos de Descuento") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            isError = state.edadError != null,
+            isError = state.puntosError != null,
             modifier = Modifier.fillMaxWidth()
         )
-        if (state.edadError != null) {
+        if (state.puntosError != null) {
             Text(
-                text = state.edadError,
+                text = state.puntosError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
+        if (state.generalError != null) {
+            Spacer(Modifier.height(8.dp))
+             Text(
+                text = state.generalError,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -114,7 +122,7 @@ private fun EditEstudianteBody(
 
         Row(modifier = Modifier.fillMaxWidth()) {
             Button(
-                onClick = { onEvent(EditEstudianteUiEvent.Save) },
+                onClick = { onEvent(EditTipoPenalidadUiEvent.Save) },
                 enabled = !state.isSaving,
                 modifier = Modifier.weight(1f)
             ) {
@@ -124,7 +132,7 @@ private fun EditEstudianteBody(
             if (!state.isNew) {
                 Spacer(Modifier.width(8.dp))
                 OutlinedButton(
-                    onClick = { onEvent(EditEstudianteUiEvent.Delete) },
+                    onClick = { onEvent(EditTipoPenalidadUiEvent.Delete) },
                     enabled = !state.isDeleting,
                     modifier = Modifier.weight(1f)
                 ) {
@@ -137,14 +145,14 @@ private fun EditEstudianteBody(
 
 @Preview(showBackground = true)
 @Composable
-private fun EditEstudianteBodyPreview() {
-    val state = EditEstudianteUiState(
-        nombres = "Jose Duarte",
-        email = "jose@email.com",
-        edad = 20
+private fun EditTipoPenalidadBodyPreview() {
+    val state = EditTipoPenalidadUiState(
+        nombre = "Llegada Tardía",
+        descripcion = "Llegó 15 minutos tarde",
+        puntosDescuento = 5
     )
     MaterialTheme {
-        EditEstudianteBody(
+        EditTipoPenalidadBody(
             state = state,
             onEvent = {}
         )

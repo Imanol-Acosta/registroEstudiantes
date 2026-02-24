@@ -28,4 +28,8 @@ class AsignaturaRepositoryImpl @Inject constructor(
     override suspend fun delete(asignatura: Asignatura) {
         asignaturaDao.delete(asignatura.toEntity())
     }
+
+    override suspend fun delete(id: Int) {
+        asignaturaDao.delete(id)
+    }
 }
