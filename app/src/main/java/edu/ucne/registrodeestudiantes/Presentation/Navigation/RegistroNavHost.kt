@@ -12,6 +12,8 @@ import edu.ucne.registrodeestudiantes.Presentation.Asignatura.AsignaturaScreen
 import edu.ucne.registrodeestudiantes.Presentation.Asignatura.List.AsignaturaListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.List.EstudianteListScreen
 import edu.ucne.registrodeestudiantes.Presentation.Estudiante.Edit.EditEstudianteScreen
+import edu.ucne.registrodeestudiantes.Presentation.Penalidad.TipoPenalidadScreen
+import edu.ucne.registrodeestudiantes.Presentation.Penalidad.List.TipoPenalidadListScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -57,6 +59,23 @@ fun RegistroNavHost(
                 val args = it.toRoute<Screen.Asignatura>()
                 AsignaturaScreen(
                     asignaturaId = args.asignaturaId,
+                    goBack = { navHostController.navigateUp() },
+                    onDrawer = { scope.launch { drawerState.open() } }
+                )
+            }
+
+            composable<Screen.PenalidadList> {
+                TipoPenalidadListScreen(
+                    onDrawer = { scope.launch { drawerState.open() } },
+                    goToPenalidad = { id -> navHostController.navigate(Screen.Penalidad(id)) },
+                    createPenalidad = { navHostController.navigate(Screen.Penalidad(0)) }
+                )
+            }
+
+            composable<Screen.Penalidad> {
+                val args = it.toRoute<Screen.Penalidad>()
+                TipoPenalidadScreen(
+                    penalidadId = args.penalidadId,
                     goBack = { navHostController.navigateUp() },
                     onDrawer = { scope.launch { drawerState.open() } }
                 )
